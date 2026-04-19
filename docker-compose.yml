@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15
+    container_name: website_monitor_db
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: monitor_db
+    ports:
+      - "5432:5432"
+  app:
+    build: .
+    container_name: website_monitor_app
+    depends_on:
+      - db
