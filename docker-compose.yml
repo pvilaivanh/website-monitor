@@ -10,6 +10,7 @@ services:
       POSTGRES_DB: monitor_db
     ports:
       - "5432:5432"
+
   app:
     build: .
     container_name: website_monitor_app
