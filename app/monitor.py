@@ -2,13 +2,6 @@ import requests
 import time
 import psycopg2
 
-URLS = [
-    "https://www.google.com",
-    "https://www.facebook.com",
-    "https://www.twitter.com",
-    "https://thissitedoesnotexist123.com"
-]
-
 def get_connection():
     return psycopg2.connect(
         host="db",
@@ -39,12 +32,6 @@ def setup_database():
         );
     """)
 
-    for url in URLS:
-        cur.execute("""
-            INSERT INTO websites (url)
-            VALUES (%s)
-            ON CONFLICT (url) DO NOTHING;
-        """, (url,))
 
     conn.commit()
     cur.close()
@@ -68,21 +55,19 @@ def main():
     conn = get_connection()
     cur = conn.cursor()
 
-    for url in URLS:
+    cur.execute("SELECT id, url FROM websites")
+    websites = cur.fetchall()
+
+    for website_id, url in websites:
         status, response_time = check_website(url)
 
         print(f"{url} | Status: {status} | Time: {response_time:.2f}s")
 
-        cur.execute("SELECT id FROM websites WHERE url = %s", (url,))
-        result = cur.fetchone()
-
-        if result:
-            website_id = result[0]
-
-            cur.execute("""
-                INSERT INTO logs (website_id, status, response_time)
-                VALUES (%s, %s, %s)
-            """, (website_id, status, response_time))
+        # Insert log
+        cur.execute("""
+            INSERT INTO logs (website_id, status, response_time)
+            VALUES (%s, %s, %s)
+        """, (website_id, status, response_time))
 
     conn.commit()
     cur.close()
