@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import ttk, messagebox
 import psycopg2
 
-# Database connection
+# Connect to PostgreSQL database (GUI runs locally)
 def get_connection():
     return psycopg2.connect(
         host="localhost",
@@ -11,14 +11,17 @@ def get_connection():
         password="password"
     )
 
-# Refresh table data
+# Refresh table with latest data (pull data from database)
 def refresh():
+    # Clear current table rows
     for row in tree.get_children():
         tree.delete(row)
 
+    # Connect to database
     conn = get_connection()
     cur = conn.cursor()
 
+    # Get latest monitoring data
     cur.execute("""
         SELECT w.url, l.status, l.response_time, l.checked_at
         FROM logs l
@@ -29,24 +32,26 @@ def refresh():
 
     data = cur.fetchall()
 
+    # Insert data into GUI table
     for row in data:
         status_text = "UP" if row[1] == 200 else "DOWN"
 
         tree.insert("", "end", values=(
-            row[0],
-            status_text,
-            f"{row[2]:.2f}s",
-            row[3]
+            row[0], # website URL
+            status_text, # UP or DOWN
+            f"{row[2]:.2f}s", # response time
+            row[3] # timestamp
         ))
 
     cur.close()
     conn.close()
 
+# Automatically refresh every few seconds
 def auto_refresh():
     refresh()
-    root.after(2000, auto_refresh)
+    root.after(2000, auto_refresh) # refresh every 2 seconds
 
-# Add website
+# Add a new website to the database
 def add_website():
     url = url_entry.get().strip()
 
@@ -58,6 +63,7 @@ def add_website():
     cur = conn.cursor()
 
     try:
+        # Insert website (ignore duplicates)
         cur.execute("""
             INSERT INTO websites (url)
             VALUES (%s)
@@ -71,10 +77,10 @@ def add_website():
     cur.close()
     conn.close()
 
-    url_entry.delete(0, tk.END)
-    refresh()
+    url_entry.delete(0, tk.END) # clear input
+    refresh() # update table
 
-# Remove website
+# Remove selected website
 def remove_website():
     selected = tree.focus()
 
@@ -96,10 +102,10 @@ def remove_website():
         if result:
             website_id = result[0]
 
-            # Delete logs first
+            # Delete logs first (avoid foreign key error)
             cur.execute("DELETE FROM logs WHERE website_id = %s", (website_id,))
 
-            # Then delete website
+            # Delete website
             cur.execute("DELETE FROM websites WHERE id = %s", (website_id,))
 
             conn.commit()
@@ -117,18 +123,20 @@ root = tk.Tk()
 root.title("Website Monitor Dashboard")
 root.geometry("800x500")
 
-# Table
+# Define table columns
 columns = ("Website", "Status", "Response Time", "Checked At")
 
+# Create table
 tree = ttk.Treeview(root, columns=columns, show="headings")
 
+# Set column titles
 for col in columns:
     tree.heading(col, text=col)
     tree.column(col, anchor="center")
 
 tree.pack(fill=tk.BOTH, expand=True, pady=10)
 
-# Input field
+# Input field for adding websites
 url_entry = tk.Entry(root, width=50)
 url_entry.pack(pady=5)
 
@@ -140,8 +148,8 @@ tk.Button(button_frame, text="Add Website", command=add_website).grid(row=0, col
 tk.Button(button_frame, text="Remove Website", command=remove_website).grid(row=0, column=1, padx=5)
 tk.Button(button_frame, text="Refresh", command=refresh).grid(row=0, column=2, padx=5)
 
-# Initial load
+# Start auto-refresh loop
 auto_refresh()
 
-# Run app
+# Run GUI
 root.mainloop()
