@@ -3,9 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="eeb4b989-25b9-4d66-8d5b-08ba8769afad" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/GUI-Monitor.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/GUI-Monitor.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/monitor.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/monitor.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -81,7 +79,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-python-sdk-b63d5a1f7c97-b61e75351b1f-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-261.22158.340" />
+        <option value="bundled-js-predefined-d6986cc7102b-31caf2ab9e3c-JavaScript-PY-261.23567.174" />
+        <option value="bundled-python-sdk-024ed6589d45-c2ffad84badb-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-261.23567.174" />
       </set>
     </attachedChunks>
   </component>
@@ -97,10 +96,26 @@
       <workItem from="1777316542860" duration="844000" />
       <workItem from="1777317428957" duration="13000" />
       <workItem from="1777317466313" duration="369000" />
+      <workItem from="1777502270618" duration="1052000" />
+      <workItem from="1777503352481" duration="11000" />
+      <workItem from="1777503501283" duration="319000" />
+      <workItem from="1777504952029" duration="1271000" />
+      <workItem from="1778084951461" duration="1459000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>

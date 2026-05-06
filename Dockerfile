@@ -1,5 +1,7 @@
+# Use Python base image
 FROM python:3.10
 
+# Set working directory inside container
 WORKDIR /app
 
 # Install cron
@@ -15,8 +17,10 @@ COPY app/ app/
 # Create cron job (every minute)
 RUN echo "* * * * * /usr/local/bin/python3 /app/app/monitor.py >> /var/log/cron.log 2>&1" > /etc/cron.d/monitor-cron
 
-# Permissions
+# Set permissions
 RUN chmod 0644 /etc/cron.d/monitor-cron
+
+# Apply cron job
 RUN crontab /etc/cron.d/monitor-cron
 
 # Log file
